@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -62,6 +63,7 @@ dependencies {
 
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation("com.arkivanov.decompose:decompose:2.1.2")
 
 
     testImplementation(libs.junit)

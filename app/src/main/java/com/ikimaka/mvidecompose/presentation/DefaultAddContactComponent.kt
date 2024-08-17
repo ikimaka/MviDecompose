@@ -1,19 +1,29 @@
 package com.ikimaka.mvidecompose.presentation
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.statekeeper.consume
 import com.ikimaka.mvidecompose.data.RepositoryImpl
 import com.ikimaka.mvidecompose.domain.AddContactUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class DefaultAddContactComponent : AddContactComponent {
+class DefaultAddContactComponent(
+    componentContext: ComponentContext
+): AddContactComponent, ComponentContext by componentContext {
 
     private val repository = RepositoryImpl
     private val addContactUseCase = AddContactUseCase(repository)
 
+    init {
+        stateKeeper.register(KEY) {
+            model.value
+        }
+    }
+
 
     private val _model = MutableStateFlow(
-        AddContactComponent.Model(username = "", phone = "")
+        stateKeeper.consume(KEY) ?: AddContactComponent.Model(username = "", phone = "")
     )
 
     override val model: StateFlow<AddContactComponent.Model>
@@ -30,5 +40,9 @@ class DefaultAddContactComponent : AddContactComponent {
     override fun onSaveContactClicked() {
         val (username, phone) = model.value
         addContactUseCase(username = username, phone = phone)
+    }
+
+    companion object {
+        private const val KEY = "DefaultAddContactComponent"
     }
 }

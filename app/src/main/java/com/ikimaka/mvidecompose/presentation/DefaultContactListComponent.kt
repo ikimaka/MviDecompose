@@ -1,16 +1,10 @@
 package com.ikimaka.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.backhandler.BackHandler
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import com.arkivanov.essenty.lifecycle.Lifecycle
-import com.arkivanov.essenty.statekeeper.StateKeeper
 import com.ikimaka.mvidecompose.core.componentScope
 import com.ikimaka.mvidecompose.data.RepositoryImpl
 import com.ikimaka.mvidecompose.domain.Contact
 import com.ikimaka.mvidecompose.domain.GetContactsUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

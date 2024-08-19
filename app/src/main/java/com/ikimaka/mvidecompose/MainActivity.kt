@@ -20,8 +20,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val root = DefaultRootComponent(componentContext = defaultComponentContext())
+
         setContent {
-            RootContent(component = DefaultRootComponent(defaultComponentContext()))
+            RootContent(component = root)
         }
     }
 }

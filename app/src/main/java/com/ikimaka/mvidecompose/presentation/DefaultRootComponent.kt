@@ -2,23 +2,33 @@ package com.ikimaka.mvidecompose.presentation
 
 import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.value.Value
 import com.ikimaka.mvidecompose.domain.Contact
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
     componentContext: ComponentContext
-): RootComponent, ComponentContext by componentContext {
+) : RootComponent, ComponentContext by componentContext {
 
-    val navigation = StackNavigation<Config>()
+    private val navigation = StackNavigation<Config>()
 
-    fun child(
-        componentContext: ComponentContext,
-        config: Config
+    val stack: Value<ChildStack<Config, ComponentContext>> = childStack(
+        source = navigation,
+        initialConfiguration = Config.ContactList,
+        handleBackButton = true,
+        childFactory = { configuration, componentContext -> child(configuration, componentContext) }
+    )
+
+    private fun child(
+        config: Config,
+        componentContext: ComponentContext
     ): ComponentContext {
-        return when(config) {
+        return when (config) {
             Config.AddContact -> {
                 DefaultAddContactComponent(
                     componentContext = componentContext,
@@ -27,6 +37,7 @@ class DefaultRootComponent(
                     }
                 )
             }
+
             Config.ContactList -> {
                 DefaultContactListComponent(
                     componentContext = componentContext,
@@ -38,6 +49,7 @@ class DefaultRootComponent(
                     }
                 )
             }
+
             is Config.EditContact -> {
                 DefaultEditContactComponent(
                     componentContext = componentContext,
@@ -51,17 +63,15 @@ class DefaultRootComponent(
     }
 
 
-
-
-    sealed interface Config: Parcelable {
+    sealed interface Config : Parcelable {
 
         @Parcelize
-        object ContactList: Config
+        object ContactList : Config
 
         @Parcelize
-        object AddContact: Config
+        object AddContact : Config
 
         @Parcelize
-        data class EditContact(val contact: Contact): Config
+        data class EditContact(val contact: Contact) : Config
     }
 }

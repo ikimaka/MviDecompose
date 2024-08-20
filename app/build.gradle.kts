@@ -65,6 +65,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation("com.arkivanov.decompose:decompose:2.1.2")
     implementation("com.arkivanov.decompose:extensions-compose-jetpack:2.1.2")
+    implementation("com.arkivanov.mvikotlin:mvikotlin:3.2.1")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-main:3.2.1")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.2.1")
 
 
     testImplementation(libs.junit)

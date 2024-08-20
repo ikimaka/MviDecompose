@@ -2,12 +2,17 @@ package com.ikimaka.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.statekeeper.consume
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.ikimaka.mvidecompose.core.componentScope
 import com.ikimaka.mvidecompose.data.RepositoryImpl
 import com.ikimaka.mvidecompose.domain.Contact
 import com.ikimaka.mvidecompose.domain.EditContactUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class DefaultEditContactComponent(
     componentContext: ComponentContext,
@@ -15,42 +20,33 @@ class DefaultEditContactComponent(
     private val onContactSaved: () -> Unit
 ): EditContactComponent, ComponentContext by componentContext {
 
-    private val repository = RepositoryImpl
-    private val editContactUseCase = EditContactUseCase(repository)
+    private lateinit var store: EditContactStore
 
     init {
-        stateKeeper.register(KEY) {
-            model.value
+        componentScope().launch {
+            store.labels.collect {
+                when (it) {
+                    EditContactStore.Label.ContactSaved -> {
+                        onContactSaved()
+                    }
+                }
+            }
         }
     }
 
-    private val _model = MutableStateFlow(
-        stateKeeper.consume(KEY) ?: EditContactComponent.Model(username = contact.username, phone = contact.phone)
-    )
-
-    override val model: StateFlow<EditContactComponent.Model>
-        get() = _model.asStateFlow()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val model: StateFlow<EditContactStore.State>
+        get() = store.stateFlow
 
     override fun onUsernameChanged(username: String) {
-        _model.value = model.value.copy(username = username)
+        store.accept(EditContactStore.Intent.ChangeUsername(username))
     }
 
     override fun onPhoneChanged(phone: String) {
-        _model.value = model.value.copy(phone = phone)
+        store.accept(EditContactStore.Intent.ChangePhone(phone))
     }
 
     override fun onSaveContactClicked() {
-        val (username, phone) = model.value
-        editContactUseCase(
-            contact.copy(
-                username = username,
-                phone = phone
-            )
-        )
-        onContactSaved()
-    }
-
-    companion object {
-        private const val KEY = "DefaultEditContactComponent"
+        store.accept(EditContactStore.Intent.SaveContact)
     }
 }

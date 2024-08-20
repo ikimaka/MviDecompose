@@ -9,11 +9,12 @@ import com.ikimaka.mvidecompose.presentation.AddContactComponent
 import com.ikimaka.mvidecompose.presentation.ContactListComponent
 import com.ikimaka.mvidecompose.presentation.DefaultRootComponent
 import com.ikimaka.mvidecompose.presentation.EditContactComponent
+import com.ikimaka.mvidecompose.presentation.RootComponent
 import com.ikimaka.mvidecompose.ui.theme.MviDecomposeTheme
 
 @Composable
 fun RootContent(
-    component: DefaultRootComponent
+    component: RootComponent
 ) {
     MviDecomposeTheme {
         Box(
@@ -24,13 +25,13 @@ fun RootContent(
             ) {
                 when (val instance = it.instance) {
 
-                    is DefaultRootComponent.Child.AddContact -> {
+                    is RootComponent.Child.AddContact -> {
                         AddContact(component = instance.component)
                     }
-                    is DefaultRootComponent.Child.ContactList -> {
+                    is RootComponent.Child.ContactList -> {
                         Contacts(component = instance.component)
                     }
-                    is DefaultRootComponent.Child.EditContact -> {
+                    is RootComponent.Child.EditContact -> {
                         EditContact(component = instance.component)
                     }
                 }

@@ -6,7 +6,6 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.ikimaka.mvidecompose.domain.Contact
 import com.ikimaka.mvidecompose.domain.EditContactUseCase
-import com.ikimaka.mvidecompose.presentation.AddContactStore.Intent
 
 
 class EditContactStoreFactory(

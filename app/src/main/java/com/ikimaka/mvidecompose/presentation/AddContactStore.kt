@@ -1,5 +1,6 @@
 package com.ikimaka.mvidecompose.presentation
 
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.mvikotlin.core.store.Store
 
 interface AddContactStore: Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> {

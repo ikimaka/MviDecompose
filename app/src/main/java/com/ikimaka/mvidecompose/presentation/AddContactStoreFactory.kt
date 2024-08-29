@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.store.create
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.ikimaka.mvidecompose.data.RepositoryImpl
 import com.ikimaka.mvidecompose.domain.AddContactUseCase
@@ -14,7 +15,7 @@ import com.ikimaka.mvidecompose.presentation.AddContactStore.Intent
 
 class AddContactStoreFactory {
 
-    private val storeFactory: StoreFactory = DefaultStoreFactory()
+    private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
     private val repository = RepositoryImpl
     private val addContactUseCase = AddContactUseCase(repository)
 
